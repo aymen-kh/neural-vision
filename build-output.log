@@ -1,0 +1,17 @@
+
+> neural-vision@0.0.0 build
+> ng build
+
+❯ Building...
+✔ Building...
+Application bundle generation failed. [4.463 seconds] - 2025-12-02T04:12:42.935Z
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "buffer"[0m
+
+    node_modules/safe-buffer/index.js:3:21:
+[37m      3 │ var buffer = require([32m'buffer'[37m);
+        ╵                      [32m~~~~~~~~[0m
+
+  The package "buffer" wasn't found on the file system but is built into node. Are you trying to bundle for node? You can use "platform: 'node'" to do that, which will remove this error.
+
+

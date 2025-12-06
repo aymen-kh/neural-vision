@@ -1,0 +1,312 @@
+<div style="min-height: 100vh; background: #0a0e27; padding: 1.5rem">
+  <!-- Header -->
+  <div style="margin-bottom: 1.5rem">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start">
+      <div style="flex: 1">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem">
+          <span style="font-size: 2.5rem; color: #d946ef">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="40"
+              height="40"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </span>
+          <h1
+            style="
+              font-size: 2.5rem;
+              font-weight: 700;
+              background: linear-gradient(to right, #d946ef, #a855f7);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+            "
+          >
+            Network Visualizer
+          </h1>
+        </div>
+        <p style="font-size: 1.125rem; color: #9ca3af">
+          {{ networkInfo() || 'Explore your neural network architecture in 3D' }}
+        </p>
+      </div>
+      <div style="display: flex; gap: 0.5rem">
+        <button
+          (click)="refreshVisualization()"
+          style="
+            padding: 0.75rem 1rem;
+            background: rgba(6, 182, 212, 0.2);
+            color: #06b6d4;
+            border-radius: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+          "
+          onmouseover="this.style.background='rgba(6, 182, 212, 0.3)'"
+          onmouseout="this.style.background='rgba(6, 182, 212, 0.2)'"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+            <path d="M21 3v5h-5"></path>
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+            <path d="M8 16H3v5"></path>
+          </svg>
+          Refresh
+        </button>
+        <button
+          (click)="resetCamera()"
+          style="
+            padding: 0.75rem 1rem;
+            background: rgba(168, 85, 247, 0.2);
+            color: #a855f7;
+            border-radius: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+          "
+          onmouseover="this.style.background='rgba(168, 85, 247, 0.3)'"
+          onmouseout="this.style.background='rgba(168, 85, 247, 0.2)'"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
+            ></path>
+            <circle cx="12" cy="13" r="4"></circle>
+          </svg>
+          Reset Camera
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3D Canvas -->
+  <div class="bg-neural-card rounded-lg overflow-hidden border border-neural-border shadow-2xl">
+    @if (isLoading()) {
+    <div class="flex items-center justify-center h-[600px]">
+      <div class="text-center">
+        <div class="animate-spin text-6xl mb-4">⚙️</div>
+        <p class="text-neural-cyan">Loading visualization...</p>
+      </div>
+    </div>
+    } @else if (!hasNetwork()) {
+    <div style="display: flex; align-items: center; justify-content: center; height: 600px">
+      <div style="text-align: center; max-width: 28rem">
+        <p style="font-size: 4rem; margin-bottom: 1rem">🧠</p>
+        <p style="color: #9ca3af; font-size: 1.5rem; margin-bottom: 1rem">No Network Built Yet</p>
+        <div
+          style="
+            padding: 1.5rem;
+            background: rgba(6, 182, 212, 0.1);
+            border: 2px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+          "
+        >
+          <p style="color: #06b6d4; margin-bottom: 1rem">
+            <strong>← Go back to Network Builder</strong>
+          </p>
+          <p style="color: #9ca3af; font-size: 0.875rem">
+            1. Drag layers to the canvas<br />
+            2. Configure your architecture<br />
+            3. Click "Build Model"<br />
+            4. Return here to visualize
+          </p>
+        </div>
+        <a
+          routerLink="/builder"
+          style="
+            margin-top: 1.5rem;
+            display: inline-block;
+            padding: 1rem 1.5rem;
+            background: #06b6d4;
+            color: #0a0e27;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: all 0.3s;
+            text-decoration: none;
+          "
+          onmouseover="this.style.boxShadow='0 20px 25px -5px rgba(6, 182, 212, 0.5)'"
+          onmouseout="this.style.boxShadow='none'"
+        >
+          🏗️ Go to Network Builder
+        </a>
+      </div>
+    </div>
+    } @else {
+    <div #canvas style="width: 100%; height: 600px; position: relative">
+      <!-- Controls overlay -->
+      <div
+        style="
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          background: rgba(10, 14, 39, 0.8);
+          backdrop-filter: blur(12px);
+          border-radius: 12px;
+          padding: 1rem;
+          border: 2px solid rgba(45, 53, 72, 0.6);
+        "
+      >
+        <h3 style="font-size: 0.875rem; font-weight: 600; color: #06b6d4; margin-bottom: 0.5rem">
+          Controls
+        </h3>
+        <ul
+          style="
+            font-size: 0.75rem;
+            color: #9ca3af;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+          "
+        >
+          <li>🖱️ Click + Drag: Rotate</li>
+          <li>🔍 Scroll: Zoom</li>
+          <li>⌨️ Right Click: Pan</li>
+        </ul>
+      </div>
+    </div>
+    }
+  </div>
+
+  <!-- Legend -->
+  @if (hasNetwork()) {
+  <div
+    style="
+      margin-top: 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    "
+  >
+    <div
+      style="
+        background: rgba(26, 31, 46, 0.8);
+        border-radius: 12px;
+        padding: 1rem;
+        border: 2px solid rgba(45, 53, 72, 0.6);
+        backdrop-filter: blur(20px);
+      "
+    >
+      <div style="display: flex; align-items: center; gap: 0.75rem">
+        <div
+          style="
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(6, 182, 212, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          "
+        >
+          <div
+            style="
+              width: 24px;
+              height: 24px;
+              border-radius: 50%;
+              background: #06b6d4;
+              animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            "
+          ></div>
+        </div>
+        <div>
+          <h3 style="font-weight: 600; color: #06b6d4">Active Neurons</h3>
+          <p style="font-size: 0.75rem; color: #9ca3af">Cyan glow indicates high activation</p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      style="
+        background: rgba(26, 31, 46, 0.8);
+        border-radius: 12px;
+        padding: 1rem;
+        border: 2px solid rgba(45, 53, 72, 0.6);
+        backdrop-filter: blur(20px);
+      "
+    >
+      <div style="display: flex; align-items: center; gap: 0.75rem">
+        <div
+          style="
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(217, 70, 239, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          "
+        >
+          <div style="width: 24px; height: 24px; border-radius: 50%; background: #d946ef"></div>
+        </div>
+        <div>
+          <h3 style="font-weight: 600; color: #d946ef">Negative Values</h3>
+          <p style="font-size: 0.75rem; color: #9ca3af">Magenta for negative activations</p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      style="
+        background: rgba(26, 31, 46, 0.8);
+        border-radius: 12px;
+        padding: 1rem;
+        border: 2px solid rgba(45, 53, 72, 0.6);
+        backdrop-filter: blur(20px);
+      "
+    >
+      <div style="display: flex; align-items: center; gap: 0.75rem">
+        <div
+          style="
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(16, 185, 129, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          "
+        >
+          <div style="width: 8px; height: 32px; background: #10b981"></div>
+        </div>
+        <div>
+          <h3 style="font-weight: 600; color: #10b981">Connections</h3>
+          <p style="font-size: 0.75rem; color: #9ca3af">Lines show layer connections</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>

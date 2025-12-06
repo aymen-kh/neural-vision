@@ -1,0 +1,229 @@
+<div style="min-height: 100vh; background: #0a0e27; padding: 1.5rem">
+  <!-- Header -->
+  <div style="margin-bottom: 1.5rem">
+    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem">
+      <span style="font-size: 2.5rem; color: #d946ef">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="40"
+          height="40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M2 12h5l3 5 4-10 3 5h5"></path>
+        </svg>
+      </span>
+      <h1
+        style="
+          font-size: 2.5rem;
+          font-weight: 700;
+          background: linear-gradient(to right, #a855f7, #d946ef);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        "
+      >
+        Activation Functions
+      </h1>
+    </div>
+    <p style="font-size: 1.125rem; color: #9ca3af">Visualize how neurons process information</p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem">
+    <!-- Sidebar -->
+    <div style="display: flex; flex-direction: column; gap: 1rem">
+      <div
+        style="
+          background: rgba(26, 31, 46, 0.8);
+          border-radius: 16px;
+          padding: 1.5rem;
+          border: 2px solid rgba(45, 53, 72, 0.6);
+          backdrop-filter: blur(20px);
+        "
+      >
+        <h2 style="font-size: 1.25rem; font-weight: 700; color: white; margin-bottom: 1rem">
+          Functions
+        </h2>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem">
+          @for (func of activationFunctions; track func) {
+          <button
+            (click)="selectActivation(func)"
+            [style.background]="selectedActivation() === func ? '#06b6d4' : 'rgba(15, 20, 25, 0.8)'"
+            [style.color]="selectedActivation() === func ? '#0a0e27' : '#9ca3af'"
+            style="
+              width: 100%;
+              padding: 0.75rem 1rem;
+              border-radius: 12px;
+              font-weight: 500;
+              text-align: left;
+              transition: all 0.2s;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              border: none;
+              cursor: pointer;
+            "
+            onmouseover="if(this.style.background !== 'rgb(6, 182, 212)') this.style.transform='translateX(4px)'"
+            onmouseout="this.style.transform='translateX(0)'"
+          >
+            <span>{{ func | activationName }}</span>
+            @if (selectedActivation() === func) {
+            <span>✓</span>
+            }
+          </button>
+          }
+        </div>
+      </div>
+
+      <div
+        style="
+          background: rgba(26, 31, 46, 0.8);
+          border-radius: 16px;
+          padding: 1.5rem;
+          border: 2px solid rgba(45, 53, 72, 0.6);
+          backdrop-filter: blur(20px);
+        "
+      >
+        <h3 style="font-weight: 700; color: white; margin-bottom: 0.5rem">Description</h3>
+        <p style="font-size: 0.875rem; color: #9ca3af; line-height: 1.625">
+          @switch (selectedActivation()) { @case ('relu') { Rectified Linear Unit. Returns 0 for
+          negative inputs and x for positive inputs. Most common activation for hidden layers. }
+          @case ('sigmoid') { S-shaped curve mapping inputs to (0, 1). Used for binary
+          classification output. } @case ('tanh') { Hyperbolic Tangent. Maps inputs to (-1, 1).
+          Zero-centered, often better than sigmoid for hidden layers. } @case ('softmax') { Converts
+          a vector of numbers into a probability distribution. Used for multi-class classification
+          output. } @case ('linear') { Identity function f(x) = x. Used for regression output. }
+          @case ('leakyReLU') { Variant of ReLU that allows a small gradient when the unit is not
+          active. Helps fix "dying ReLU" problem. } @default { Mathematical function attached to
+          each neuron in a neural network. } }
+        </p>
+      </div>
+    </div>
+
+    <!-- Visualization Area -->
+    <div>
+      <div
+        style="
+          background: rgba(26, 31, 46, 0.8);
+          border-radius: 16px;
+          padding: 1.5rem;
+          border: 2px solid rgba(45, 53, 72, 0.6);
+          backdrop-filter: blur(20px);
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+        "
+      >
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+          "
+        >
+          <h2
+            style="
+              font-size: 1.5rem;
+              font-weight: 700;
+              color: white;
+              display: flex;
+              align-items: center;
+              gap: 0.75rem;
+            "
+          >
+            <span style="font-size: 2rem">📈</span>
+            {{ selectedActivation() | activationName }} Visualization
+          </h2>
+          <div style="display: flex; gap: 1rem; font-size: 0.875rem">
+            <div style="display: flex; align-items: center; gap: 0.5rem">
+              <div style="width: 12px; height: 12px; background: #06b6d4; border-radius: 50%"></div>
+              <span style="color: #d1d5db">Function Output</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem">
+              <div style="width: 12px; height: 12px; background: #d946ef; border-radius: 50%"></div>
+              <span style="color: #d1d5db">Derivative (Gradient)</span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          style="
+            flex: 1;
+            position: relative;
+            min-height: 500px;
+            background: rgba(15, 20, 25, 0.5);
+            border-radius: 12px;
+            border: 2px solid rgba(45, 53, 72, 0.6);
+            padding: 1rem;
+          "
+        >
+          <canvas #chart></canvas>
+        </div>
+
+        <div
+          style="
+            margin-top: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+          "
+        >
+          <div
+            style="
+              padding: 1rem;
+              background: rgba(15, 20, 25, 0.8);
+              border-radius: 12px;
+              border: 2px solid rgba(45, 53, 72, 0.6);
+            "
+          >
+            <div style="color: #9ca3af; font-size: 0.75rem; margin-bottom: 0.25rem">Range</div>
+            <div style="color: #06b6d4; font-family: monospace">
+              @switch (selectedActivation()) { @case ('relu') { [0, ∞) } @case ('sigmoid') { (0, 1)
+              } @case ('tanh') { (-1, 1) } @case ('leakyReLU') { (-∞, ∞) } @default { (-∞, ∞) } }
+            </div>
+          </div>
+          <div
+            style="
+              padding: 1rem;
+              background: rgba(15, 20, 25, 0.8);
+              border-radius: 12px;
+              border: 2px solid rgba(45, 53, 72, 0.6);
+            "
+          >
+            <div style="color: #9ca3af; font-size: 0.75rem; margin-bottom: 0.25rem">Monotonic</div>
+            <div style="color: #10b981; font-family: monospace">Yes</div>
+          </div>
+          <div
+            style="
+              padding: 1rem;
+              background: rgba(15, 20, 25, 0.8);
+              border-radius: 12px;
+              border: 2px solid rgba(45, 53, 72, 0.6);
+            "
+          >
+            <div style="color: #9ca3af; font-size: 0.75rem; margin-bottom: 0.25rem">
+              Zero-Centered
+            </div>
+            <div
+              style="font-family: monospace"
+              [style.color]="
+                selectedActivation() === 'tanh' || selectedActivation() === 'linear'
+                  ? '#10b981'
+                  : '#ef4444'
+              "
+            >
+              {{
+                selectedActivation() === 'tanh' || selectedActivation() === 'linear' ? 'Yes' : 'No'
+              }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+<div class="p-6 h-full flex flex-col gap-6">
+    <div class="flex justify-between items-center">
+        <div>
+            <h2 class="text-2xl font-bold text-glow">Live Prediction</h2>
+            <p class="text-gray-400 text-sm">Draw a digit or load a sample to test the model</p>
+        </div>
+        <div class="flex gap-2">
+            <button class="btn-secondary" (click)="loadRandomSample()">
+                Random Sample
+            </button>
+            <button class="btn-secondary text-red-400 border-red-400 hover:bg-red-400 hover:text-white"
+                (click)="clearCanvas()">
+                Clear
+            </button>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 flex-1">
+        <!-- Drawing Area -->
+        <div class="glass-card p-6 flex flex-col items-center justify-center relative">
+            <div class="relative">
+                <canvas #drawCanvas width="280" height="280"
+                    class="border-2 border-neural-border rounded-lg cursor-crosshair touch-none bg-black shadow-lg shadow-neural-cyan/10">
+                </canvas>
+                <div class="absolute -bottom-8 left-0 right-0 text-center text-xs text-gray-500">
+                    Draw inside the box
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Area -->
+        <div class="glass-card p-6 flex flex-col">
+            <h3 class="text-lg font-bold mb-4 text-neural-cyan">Confidence Scores</h3>
+
+            <div class="flex-1 relative min-h-[200px]">
+                <canvas #chart></canvas>
+            </div>
+
+            <div *ngIf="predictionResult() as result" class="mt-6 text-center animate-pulse-glow">
+                <p class="text-gray-400 text-sm uppercase tracking-wider">Predicted Digit</p>
+                <div class="text-6xl font-bold text-neural-green my-2">
+                    {{ result.label }}
+                </div>
+                <p class="text-neural-cyan text-sm">
+                    Confidence: {{ (result.confidence | percent:'1.1-1') }}
+                </p>
+            </div>
+
+            <div *ngIf="!isModelReady()"
+                class="mt-4 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded text-yellow-500 text-center text-sm">
+                ⚠️ Model not trained yet. Please build and train a model first.
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+.network-visualizer {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Canvas container */
+#canvas {
+  position: relative;
+  background: radial-gradient(circle at center, #0a0e27, #060a1a);
+}
+
+/* Glow effects */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 20px currentColor;
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 40px currentColor;
+  }
+}

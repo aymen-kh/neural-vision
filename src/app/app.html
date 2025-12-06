@@ -1,0 +1,188 @@
+<div
+  class="min-h-screen flex flex-col"
+  style="background: linear-gradient(135deg, #0a0d11 0%, #0f1419 50%, #1a1f2e 100%); color: #e5e7eb"
+>
+  <!-- Navbar -->
+  <nav
+    style="
+      height: 64px;
+      border-bottom: 1px solid #2d3548;
+      background: rgba(26, 31, 46, 0.8);
+      backdrop-filter: blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    "
+  >
+    <div
+      style="
+        max-width: 1536px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      "
+    >
+      <div style="display: flex; align-items: center; gap: 0.75rem">
+        <div
+          style="
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+            font-size: 1.5rem;
+            color: white;
+          "
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"></path>
+            <path d="M8.5 8.5a2.5 2.5 0 0 0-2.5 2.5"></path>
+            <path d="M15.5 15.5a2.5 2.5 0 0 0 2.5-2.5"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 style="font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; color: white">
+            Neural Vision
+          </h1>
+          <p style="font-size: 0.75rem; color: #9ca3af">Interactive ML Visualizer</p>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0.5rem">
+        <a routerLink="/dataset" routerLinkActive="active-nav" class="nav-item">
+          <span class="icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+            </svg>
+          </span>
+          <span>Dataset</span>
+        </a>
+        <a routerLink="/builder" routerLinkActive="active-nav" class="nav-item">
+          <span class="icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+              <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+              <line x1="6" y1="6" x2="6" y2="6"></line>
+              <line x1="6" y1="18" x2="6" y2="18"></line>
+            </svg>
+          </span>
+          <span>Builder</span>
+        </a>
+        <a routerLink="/visualize" routerLinkActive="active-nav" class="nav-item">
+          <span class="icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+              ></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </span>
+          <span>3D View</span>
+        </a>
+        <a routerLink="/train" routerLinkActive="active-nav" class="nav-item">
+          <span class="icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </span>
+          <span>Train</span>
+        </a>
+        <a routerLink="/activations" routerLinkActive="active-nav" class="nav-item">
+          <span class="icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M2 12h5l3 5 4-10 3 5h5"></path>
+            </svg>
+          </span>
+          <span>Activations</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main style="flex: 1; position: relative; overflow: hidden">
+    <div
+      class="bg-neural-grid"
+      style="position: absolute; inset: 0; opacity: 0.2; pointer-events: none"
+    ></div>
+    <div
+      class="custom-scrollbar"
+      style="height: 100%; overflow-y: auto; position: relative; z-index: 1"
+    >
+      <div style="max-width: 1536px; margin: 0 auto; padding: 2rem 1.5rem">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </main>
+</div>
