@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { NeuralNetworkService } from '../../services/neural-network';
 import { Dataset } from '../../services/dataset';
 import { Training } from '../../services/training';
+import { ModelHistoryService } from '../../services/model-history.service';
 import {
   TrainingConfig,
   TrainingMetrics,
@@ -58,7 +59,8 @@ export class TrainingDashboard implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private nnService: NeuralNetworkService,
     private datasetService: Dataset,
-    private trainingService: Training
+    private trainingService: Training,
+    private modelHistory: ModelHistoryService
   ) { }
 
   ngOnInit(): void {
@@ -282,6 +284,7 @@ export class TrainingDashboard implements OnInit, AfterViewInit, OnDestroy {
       // Start training
       const history = await this.trainingService.trainModel(model, x, y, config);
 
+      console.log('[Training] Training completed successfully');
       alert(`Training completed! Best accuracy: ${(history.bestAccuracy * 100).toFixed(2)}%`);
 
       // Mark model as trained
@@ -304,8 +307,22 @@ export class TrainingDashboard implements OnInit, AfterViewInit, OnDestroy {
       xTest.dispose();
       yTest.dispose();
 
+      // Save training session to JSON server
+      console.log('[Training] Saving training session to server');
+      const lastMetrics = history.history[history.history.length - 1];
+      this.modelHistory.saveTrainingSession({
+        modelId: 1,
+        epochs: this.epochs,
+        accuracy: history.bestAccuracy,
+        loss: lastMetrics?.loss || history.bestLoss,
+        date: new Date().toISOString()
+      }).subscribe({
+        next: (session: any) => console.log('[Training] Session saved:', session),
+        error: (err: any) => console.error('[Training] Failed to save session:', err)
+      });
+
     } catch (error) {
-      console.error('Training error:', error);
+      console.error('[Training] Training error:', error);
       alert(`Training error: ${error}`);
     } finally {
       // Cleanup tensors

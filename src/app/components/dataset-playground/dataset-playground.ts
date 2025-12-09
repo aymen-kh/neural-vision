@@ -1,6 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Dataset } from '../../services/dataset';
 import { DataPoint } from '../../models/dataset.model';
 import { DigitRenderDirective } from '../../directives/digit-render.directive';
@@ -29,7 +30,10 @@ export class DatasetPlayground implements OnInit {
   csvLabelColumn = 0;
   csvTestSplit = 0.2;
 
-  constructor(private datasetService: Dataset) {
+  constructor(
+    private datasetService: Dataset,
+    private router: Router
+  ) {
     // Load persisted config
     const config = this.datasetService.csvConfig();
     this.csvHasHeader = config.hasHeader;
@@ -142,31 +146,56 @@ export class DatasetPlayground implements OnInit {
       }
 
       this.uploadProgress.set('Loading samples...');
+      console.log('[Dataset] Starting to load samples from uploaded file');
       await this.loadSamples();
       this.uploadProgress.set('✓ Dataset loaded successfully!');
+      console.log('[Dataset] Dataset loaded successfully, preparing to auto-navigate');
 
-      setTimeout(() => this.uploadProgress.set(''), 3000);
+      // Auto-navigate to builder after a brief delay
+      setTimeout(() => {
+        console.log('[Dataset] Auto-navigating to network builder');
+        this.uploadProgress.set('');
+        this.router.navigate(['/builder']).then(() => {
+          console.log('[Dataset] Navigation to /builder completed successfully');
+        }).catch((err) => {
+          console.error('[Dataset] Navigation to /builder failed:', err);
+        });
+      }, 1500);
     } catch (err) {
       this.error.set('Failed to load file: ' + (err as Error).message);
-      console.error('Error loading file:', err);
+      console.error('[Dataset] Error loading file:', err);
       this.currentFile = null; // Reset on error
     } finally {
       this.isLoading.set(false);
       input.value = ''; // Reset input
+      console.log('[Dataset] File upload process completed');
     }
   }
 
   loadMNIST(): void {
+    console.log('[Dataset] Starting MNIST dataset loading');
     this.isLoading.set(true);
     this.error.set('');
 
     this.datasetService
       .loadMNIST()
       .then(() => {
+        console.log('[Dataset] MNIST dataset loaded successfully');
         this.loadSamples();
+        console.log('[Dataset] Preparing to auto-navigate to builder after MNIST load');
+        // Auto-navigate to builder after MNIST is loaded
+        setTimeout(() => {
+          console.log('[Dataset] Auto-navigating to network builder from MNIST');
+          this.router.navigate(['/builder']).then(() => {
+            console.log('[Dataset] Navigation to /builder completed successfully');
+          }).catch((err) => {
+            console.error('[Dataset] Navigation to /builder failed:', err);
+          });
+        }, 1500);
       })
       .catch((err) => {
         this.error.set('Failed to load MNIST: ' + err.message);
+        console.error('[Dataset] Failed to load MNIST:', err);
       });
   }
 

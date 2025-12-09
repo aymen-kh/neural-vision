@@ -1,5 +1,6 @@
 import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -91,7 +92,8 @@ export class NetworkBuilder {
   constructor(
     private fb: FormBuilder,
     private nnService: NeuralNetworkService,
-    private datasetService: Dataset
+    private datasetService: Dataset,
+    private router: Router
   ) {
     this.layerConfigForm = this.createLayerConfigForm();
     this.optimizerForm = this.createOptimizerForm();
@@ -310,14 +312,26 @@ export class NetworkBuilder {
       updatedAt: new Date(),
     };
 
-    console.log('Architecture to build:', architecture);
+    console.log('[Builder] Architecture to build:', architecture);
 
     try {
+      console.log('[Builder] Starting model build process');
       this.nnService.buildModel(architecture);
-      console.log('Model built successfully');
+      console.log('[Builder] Model built successfully');
       alert('Model built successfully!');
+
+      // Auto-navigate to training dashboard after a brief delay
+      console.log('[Builder] Preparing to auto-navigate to training dashboard');
+      setTimeout(() => {
+        console.log('[Builder] Auto-navigating to training dashboard');
+        this.router.navigate(['/train']).then(() => {
+          console.log('[Builder] Navigation to /train completed successfully');
+        }).catch((err) => {
+          console.error('[Builder] Navigation to /train failed:', err);
+        });
+      }, 1000);
     } catch (error) {
-      console.error('Error building model:', error);
+      console.error('[Builder] Error building model:', error);
       alert(`Error building model: ${error}`);
     }
   }
